@@ -17,7 +17,9 @@ class AdminController extends Controller
 
     public function index()
     {
-        $posts = Post::all();
+
+        // $posts = Post::All();
+        $posts = auth()->user()->posts()->paginate(8);
         return view('admin.index', ['posts' => $posts]);
     }
 
@@ -28,45 +30,62 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        // $user_id = auth()->user()->id;
-        // $user = User::find($user_id);
+        $request->validate([
+            'title' => 'required|min:3|max:255',
+            'body' => 'required',
+            'slug' => 'required|min:10|max:120',
+        ]);
 
         $user = Auth::user();
 
-        $posts = new Post();
-        $posts->title = request('title');
-        $posts->body = request('body');
-        $posts->slug = request('excert');
-
-        // if ($request->hasFile('post_image')) {
-        //     $name = $request->file('post_image')->getClientOriginalName();
-        //     $path = $request->file('post_image')->store('public/images');
-        //     $posts->post_image = $name;
-        // }
+        $post = new Post();
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->slug = request('slug');
 
         if ($request->hasFile('post_image')) {
             $filename = $request->file('post_image')->getClientOriginalName();
             $request->file('post_image')->move(public_path('images'), $filename);
-            $posts->post_image = $filename;
+            $post->post_image = $filename;
         }
 
-        $user->posts()->save($posts);
-        return redirect('/');
+        $user->posts()->save($post);
+        return redirect()->route('home')->with('success', 'Post created sucecessfully');
     }
 
-    public function edit($post_id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($post_id);
         return view('admin.edit')->with(['post' => $post]);
     }
 
-    public function update()
+    public function update(Request $request, Post $post)
     {
-        return redirect(route('admin.index'));
+        $user = Auth::user();
+        $request->validate([
+            'title' => 'required|min:3|max:255',
+            'body' => 'required',
+            'slug' => 'required|min:10|max:120',
+        ]);
+
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->slug = request('slug');
+
+        if ($request->hasFile('post_image')) {
+            $filename = $request->file('post_image')->getClientOriginalName();
+            $request->file('post_image')->move(public_path('images'), $filename);
+            $post->post_image = $filename;
+        }
+        // $this->authorize('update', $post);
+        $user->posts()->save($post);
+
+        return redirect(route('admin.index'))->with('update-success', 'Post updated successfully');
+        // dd($post);
+        dd($post);
     }
-    public function destroy($post_id)
+    public function destroy(Post $post)
     {
-        $post = Post::findOrFail($post_id);
+        // $post = Post::findOrFail($post_id);
         $user = Auth::user();
 
         // // Deleting only posts for the log in user
@@ -74,6 +93,6 @@ class AdminController extends Controller
 
         // Delete any post
         $post->delete();
-        return redirect(route('admin.index'));
+        return redirect(route('admin.index'))->with('status', 'Post deleted successfully');
     }
 }
