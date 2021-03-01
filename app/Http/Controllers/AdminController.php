@@ -19,7 +19,7 @@ class AdminController extends Controller
     {
 
         // $posts = Post::All();
-        $posts = auth()->user()->posts()->paginate(8);
+        $posts = auth()->user()->posts()->latest()->paginate(8);
         return view('admin.index', ['posts' => $posts]);
     }
 
@@ -30,7 +30,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $inputs = $request->validate([
             'title' => 'required|min:3|max:255',
             'body' => 'required',
             'slug' => 'required|min:10|max:120',
@@ -38,18 +38,20 @@ class AdminController extends Controller
 
         $user = Auth::user();
 
-        $post = new Post();
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->slug = request('slug');
+        // $post = new Post();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->slug = request('slug');
 
         if ($request->hasFile('post_image')) {
             $filename = $request->file('post_image')->getClientOriginalName();
             $request->file('post_image')->move(public_path('images'), $filename);
-            $post->post_image = $filename;
+            // $post->post_image = $filename;
+            $inputs['post_image'] = $filename;
         }
 
-        $user->posts()->save($post);
+        $user->posts()->create($inputs);
+        // dd($inputs);
         return redirect()->route('home')->with('success', 'Post created sucecessfully');
     }
 
