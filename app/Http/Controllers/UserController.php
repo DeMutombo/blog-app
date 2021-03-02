@@ -75,7 +75,22 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $inputs = request()->validate([
+            'username' => 'required|string|max:255|alpha_dash',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($request->hasFile('avatar')) {
+            $fileName = $request->file('avatar')->getClientOriginalName();
+            $request->file('avatar')->move(public_path('images'), $fileName);
+            $inputs['avatar'] = $fileName;
+        }
+
+        $user->update($inputs);
+        // dd($inputs);
+        return back();
     }
 
     /**

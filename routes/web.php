@@ -17,6 +17,10 @@ Route::get('/admin/{post}/edit', [AdminController::class, 'edit'])->Middleware('
 Route::put('/admin/{post}', [AdminController::class, 'update'])->Middleware('can:update,post')->name('admin.update');
 Route::delete('/admin/{post}', [AdminController::class, 'destroy'])->name('admin.delete');
 
-Route::get('/admin/user/profile/{user}', [UserController::class, 'show'])->name('user.profile');
+Route::get('/admin/users/index', [UserController::class, 'index'])->name('user.all');
+Route::get('/admin/users/{user}/profile', [UserController::class, 'show'])->name('user.profile');
+Route::put('/admin/users/{user}/update', [UserController::class, 'update'])->name('user.profile.update');
+
+
 
 Route::get('/post/{id}', [PostController::class, 'show'])->name('post');

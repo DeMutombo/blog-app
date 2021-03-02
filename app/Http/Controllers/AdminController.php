@@ -31,9 +31,9 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->validate([
-            'title' => 'required|min:3|max:255',
+            'title' => 'required|min:3|max:120',
             'body' => 'required',
-            'slug' => 'required|min:10|max:120',
+            'slug' => 'required|min:10|max:255',
         ]);
 
         $user = Auth::user();
