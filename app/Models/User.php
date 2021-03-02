@@ -17,6 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',
@@ -54,5 +55,15 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function userHsaRole($roleName)
+    {
+        foreach ($this->roles as $role) {
+            if ($roleName == $role->name) {
+                return true;
+            }
+            return false;
+        }
     }
 }
