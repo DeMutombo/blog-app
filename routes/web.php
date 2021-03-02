@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +16,7 @@ Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.cre
 Route::get('/admin/{post}/edit', [AdminController::class, 'edit'])->Middleware('can:update,post')->name('admin.edit');
 Route::put('/admin/{post}', [AdminController::class, 'update'])->Middleware('can:update,post')->name('admin.update');
 Route::delete('/admin/{post}', [AdminController::class, 'destroy'])->name('admin.delete');
+
+Route::get('/admin/user/profile/{user}', [UserController::class, 'show'])->name('user.profile');
 
 Route::get('/post/{id}', [PostController::class, 'show'])->name('post');
