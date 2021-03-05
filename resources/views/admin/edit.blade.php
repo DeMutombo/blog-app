@@ -34,15 +34,11 @@
                   @enderror
                 </div>
                 <div class="form-group">
-                  <div><img src="/images/{{ $post->post_image }}" width="120" height="60" alt="{{ $post->title}} image"></div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">Upload</span>
-                        </div>
-                        <div class="custom-file">
-                          <input type="file" name="post_image" class="custom-file-input" id="inputGroupFile01">
-                          <label class="custom-file-label" for="post_image">Choose file</label>
-                        </div>
+                  <div>
+                    <img src="/images/{{ $post->post_image }}" width="120" height="60" alt="{{ $post->title}} image"></div>
+                    <div class="form-group">
+                        <label for="post_image">Post image</label>
+                        <input type="file" name="post_image" class="form-control" >
                       </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
