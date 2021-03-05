@@ -20,6 +20,7 @@ Route::delete('/admin/{post}', [AdminController::class, 'destroy'])->name('admin
 Route::get('/admin/users/index', [UserController::class, 'index'])->name('user.all');
 Route::get('/admin/users/{user}/profile', [UserController::class, 'show'])->name('user.profile');
 Route::put('/admin/users/{user}/update', [UserController::class, 'update'])->name('user.profile.update');
+Route::delete('/admin/users/{user}/delete', [UserController::class, 'destroy'])->name('user.destroy');
 
 
 

@@ -33,15 +33,8 @@
                   @enderror
                 </div>
                 <div class="form-group">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">Upload</span>
-                        </div>
-                        <div class="custom-file">
-                          <input type="file" name="post_image" class="custom-file-input" id="inputGroupFile01">
-                          <label class="custom-file-label" for="post_image">Choose file</label>
-                        </div>
-                      </div>
+                          <label for="post_image">Post Image</label>
+                          <input type="file" name="post_image" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form> 

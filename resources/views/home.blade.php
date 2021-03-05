@@ -1,9 +1,15 @@
 <x-home-master>
     @section('content')
     @if (session('success'))
-    <div class="alert alert-success" role="alert">
-        {{ session('success') }}
-      </div>
+        <div class="alert alert-success" role="alert">
+             {{ session('success') }}
+        </div>
+    @endif
+    
+    @if (session('user-deleted'))
+      <div class="alert alert-danger" role="alert">
+        {{ session('user-deleted') }}
+      </div> 
     @endif
     <h1 class="my-4">Page Heading
         <small>Secondary Text</small>

@@ -1,5 +1,11 @@
 <x-admin-master>
     @section('content')
+    @if (session('update-profile'))
+    <div class="alert alert-success">
+      {{ session('update-profile') }}
+    </div>
+        
+    @endif
     <div class="row">
         <div class="col-6">
             <div class="card mb-3" style="max-width: 680px;">
@@ -9,11 +15,10 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      {{-- <h6 class="card-title">Welcome {{ $user->username }}</h6> --}}
                       <p><span class="fw-bold mr-3"> Username:</span>  {{ $user->username }}</p>
                       <p><span class="fw-bold mr-3">Name: </span>{{ $user->name }}</p>
-                      <p class="card-text">Email: {{ $user->email }}</p>
-                      <p class="card-text">Role: @foreach ($user->roles as $role)
+                      <p class="">Email: {{ $user->email }}</p>
+                      <p class="">Role: @foreach ($user->roles as $role)
                         {{ $role->name }}
                       @endforeach</p>
                     </div>
@@ -57,19 +62,6 @@
                         {{ $message }}
                       </div>
                     @enderror
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control @error('password') border border-danger @enderror" value="{{ $user->password }}" required>
-                    @error('password')
-                      <div class="text-danger">
-                        {{ $message }}
-                      </div>
-                    @enderror
-                  </div>
-                  <div class="form-group">
-                    <label for="password-confirm">{{ __('Confirm Password') }}</label>
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                   </div>
                   <button type="submit" class="btn btn-primary">Update</button>
               </form>

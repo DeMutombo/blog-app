@@ -77,10 +77,9 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $inputs = request()->validate([
-            'username' => 'required|string|max:255|alpha_dash',
+            'username' => ['required', 'string', 'max:255', 'alpha_dash'],
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8|confirmed',
         ]);
 
         if ($request->hasFile('avatar')) {
@@ -90,8 +89,7 @@ class UserController extends Controller
         }
 
         $user->update($inputs);
-        // dd($inputs);
-        return back();
+        return back()->with('update-profile', 'Successfully updated user profile');
     }
 
     /**
@@ -102,6 +100,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if ($user->id == auth()->id()) {
+            return back()->with('user-deleted', 'You can not delete Your logged in out');
+        }
+        $user->delete();
+        return redirect(route('user.all'))->with('user-deleted', 'The user was deleted successfully');
     }
 }

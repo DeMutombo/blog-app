@@ -13,6 +13,11 @@
          {{ session('update-success') }}
        </div> 
      @endif
+     @if (session('user-deleted'))
+         <div class="alert alert-danger">
+          {{ session('user-deleted') }}
+         </div>
+     @endif
      <!-- DataTales Example -->
      @if ($users->count() === 0)
          <div class="text-center">
@@ -29,11 +34,11 @@
                <thead>
                  <tr>
                    <th scope="col">Id</th>
+                   <th scope="col">Avatar</th>
                    <th scope="col">User name</th>
                    <th scope="col">Name</th>
                    <th scope="col">Role</th>
                    <th scope="col">email</th>
-                   <th scope="col">Avatar</th>
                    <th scope="col">Created at</th>
                    <th scope="col">Updated at</th>
                    <th scope="col">delete</th>
@@ -43,17 +48,17 @@
                 @foreach ($users as $user)
                 <tr>
                   <th scope="row">{{ $user->id }}</th>
+                  <td class="text-center"><img src="/images/{{ $user->avatar }}" height="40px" alt=""></td>
                   <td>{{ $user->username }}</td>
                   <td>{{ $user->name }}</td>
                   <td>@foreach ($user->roles as $role)
                       {{ $role->name }}
                   @endforeach</td>
                   <td>{{ $user->email }}</td>
-                  <td class="text-center"><img src="/images/{{ $user->avatar }}" height="40px" alt=""></td>
                   <td>{{ $user->created_at->diffForHumans() }}</td>
                   <td>{{ $user->updated_at->diffForHumans() }}</td>
                   <td>
-                    <form action="/admin/{{ $user->id }}" method="POST">
+                    <form action="{{ route('user.destroy', $user->id) }}" method="POST">
                       @method('DELETE')
                       @csrf
                       <input type="submit"  class="btn btn-danger" value="Delete">
@@ -64,13 +69,15 @@
              </tbody>
                <tfoot>
                  <tr>
-                   <th scope="col">Id</th>
-                   <th scope="col">Owner</th>
-                   <th scope="col">Title</th>
-                   <th scope="col">Image</th>
-                   <th scope="col">Created at</th>
-                   <th scope="col">Updated at</th>
-                   <th scope="col">delete</th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Avatar</th>
+                  <th scope="col">User name</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">email</th>
+                  <th scope="col">Created at</th>
+                  <th scope="col">Updated at</th>
+                  <th scope="col">delete</th>
                  </tr>
                </tfoot>
               
@@ -84,7 +91,29 @@
          </div>
        </div> --}}
      @endif
- 
+
+      {{-- Admin Delete Modal --}}
+      <div class="modal fade" id="adminDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              {{-- <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a> --}}
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger" >Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
      @endsection
      @section('scripts')
      <script src="vendor/datatables/jquery.dataTables.min.js"></script>

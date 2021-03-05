@@ -46,12 +46,12 @@ class AdminController extends Controller
         if ($request->hasFile('post_image')) {
             $filename = $request->file('post_image')->getClientOriginalName();
             $request->file('post_image')->move(public_path('images'), $filename);
-            // $post->post_image = $filename;
             $inputs['post_image'] = $filename;
         }
 
-        $user->posts()->create($inputs);
         // dd($inputs);
+
+        $user->posts()->create($inputs);
         return redirect()->route('home')->with('success', 'Post created sucecessfully');
     }
 
@@ -64,9 +64,9 @@ class AdminController extends Controller
     {
         $user = Auth::user();
         $request->validate([
-            'title' => 'required|min:3|max:255',
+            'title' => 'required|min:3|max:120',
             'body' => 'required',
-            'slug' => 'required|min:10|max:120',
+            'slug' => 'required|min:10|max:255',
         ]);
 
         $post->title = request('title');
@@ -82,8 +82,6 @@ class AdminController extends Controller
         $user->posts()->save($post);
 
         return redirect(route('admin.index'))->with('update-success', 'Post updated successfully');
-        // dd($post);
-        dd($post);
     }
     public function destroy(Post $post)
     {

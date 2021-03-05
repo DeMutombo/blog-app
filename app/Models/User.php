@@ -43,6 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // using mutator to encrypt the pass word before it is stored to the database.
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
